@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<head lang="en">
+<meta charset="UTF-8">
+<title>预算记录</title>
+<link type="text/css" rel="stylesheet" href="./css/bootstrap.min.css" />
+<link type="text/css" rel="stylesheet"
+	href="./css/bootstrap-dialog.min.css">
+<link type="text/css" rel="stylesheet" href="./css/commone.css" />
+<link type="text/css" rel="stylesheet" href="./css/xjk.css" />
+<script type="text/javascript" src="./js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="./js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./js/bootstrap-dialog.min.js"></script>
+<script type="text/javascript" src="./js/bootstrap-pagy.min.js"></script>
+<script type="text/javascript"
+	src="./js/plugins/my97datepicker/WdatePicker.js"></script>
+<script type="text/javascript"
+	src="./js/plugins/kindeditor-4.1.10/kindeditor-min.js"></script>
+<script type="text/javascript"
+	src="./js/plugins/kindeditor-4.1.10/zh_CN.js"></script>
+<script type="text/javascript"
+	src="./js/plugins/kindeditor-4.1.10/prettify.js"></script>
+<script type="text/javascript" src="./js/common.js"></script>
+<script type="text/javascript" src="./js/budget.js"></script>
+</head>
+</head>
+
+<body>
+	<div class="nav navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<a href="./index.html" class="navbar-brand"><span
+				class="glyphicon glyphicon-home"></span>&nbsp;首页</a>
+			<ul class="nav navbar-nav" id="nav-box-ul"></ul>
+			<ul class="nav navbar-nav pull-right">
+				<li><a href="./modify_password.html" class="acctInfo"
+					data-toggle="modal" data-target="#modifyPassword"><span
+						class="glyphicon glyphicon-user"></span>&nbsp;</a></li>
+				<li><a href="javascript:void(0)" onclick="exit()">注销</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="container main hide">
+		<div class="row">
+			<ol class="breadcrumb"></ol>
+			<div class="row main-page">
+				<div class="col-lg-8">
+				    <input type="text" class="form-control list_timebox date-before querymonth " placeholder="月份" />
+					<div class="input-group">
+						<input type="text" class="form-control searchInput"
+							name="searchInput" placeholder="预算名称" maxlength="64" value="" />
+						<span class="input-group-btn"><button
+								class="btn btn-primary" type="button" onclick="$.search()">
+								<span class="glyphicon glyphicon-search"></span>搜索
+							</button></span>
+					</div>
+					<!-- /input-group -->
+				</div>
+				<div class="col-lg-2"></div>
+				<div class="col-lg-2">
+					<button type="button"
+						class="btn btn-primary add-btn hide float-right"
+						onclick="showAddBox()">
+						<span class="glyphicon glyphicon-plus"></span>新增预算
+					</button>
+				</div>
+			</div>
+			<table class="table table-bordered table-hover"
+				style="margin-top:20px;">
+				<thead>
+					<th style="width:60px;">编号</th>
+					<th style="width:90px;">月份</th>
+					<th style="width:120px;">名称</th>
+					<th style="width:60px;">消费数</th>
+					<th style="width:90px;">预算金额</th>
+					<th style="width:90px;">已使用</th>
+					<th style="width:90px;">剩余金额</th>
+					<th style="width:150px;">修改时间</th>
+					<th style="width:210px;">备注</th>
+					<th>操作</th>
+				</thead>
+				<tbody class="tbody-info"></tbody>
+			</table>
+			<nav id="pagination">
+				<ul class="pagination"></ul>
+			</nav>
+			<footer>
+				开发者 - Ryan - <a href="http://www.te5l.com" target="_blank">www.te5L.com</a>
+			</footer>
+		</div>
+	</div>
+
+
+	<div class="modal fade add-budget-box sm-modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">添加预算记录</h4>
+				</div>
+				<div class="modal-body">
+					<input type="text" class="form-control  desc-add-box"
+						placeholder="预算名称" maxlength="64" /> 
+						<input type="number" step="0.01" class="form-control margin-top-15 je-add-box" placeholder="预算金额" />
+					<textarea
+						class="form-control margin-top-15 resize float-left detail-add-box"
+						rows="3" placeholder="预算详情" maxlength="128"></textarea>
+					<div class="clear"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary" onclick="save()">添加</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+	<div class="modal fade modify-budget-box sm-modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">修改预算记录</h4>
+				</div>
+				<div class="modal-body">
+					<input type="text" class="form-control  desc-modify-box"
+						placeholder="预算名称" maxlength="64" /> 
+						<input type="number" step="0.01" class="form-control margin-top-15 je-modify-box" placeholder="预算金额" />
+					<textarea
+						class="form-control margin-top-15 resize float-left detail-modify-box"
+						rows="3" placeholder="预算详情" maxlength="128"></textarea>
+					<div class="clear"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary" onclick="modify()">修改</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="modal fade log-budget-box">
+		<div class="modal-dialog default-modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">预算日志</h4>
+				</div>
+				<div class="modal-body" style="max-height:450px; overflow-y:auto;">
+					<table class="table table-bordered table-hover">
+						<thead>
+							<th style="width:50px;">序号</th>
+							<th style="width:80px;">动前金额</th>
+							<th style="width:80px;">动用金额</th>
+							<th style="width:80px;">动后金额</th>
+							<th style="width:100px;">关联消费记录</th>
+							<th style="width:70px;">操作人</th>
+							<th style="width:140px;">操作时间</th>
+							<th>备注</th>
+						</thead>
+						<tbody class="table-log-budget-box"></tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="modal fade" id="modifyPassword" tabindex="-1" role="dialog"
+		aria-labelledby="modifyPasswordLabel" aria-hidden="true">
+		<div class="modal-dialog" style="width:400px;">
+			<div class="modal-content"></div>
+		</div>
+	</div>
+
+</body>
+</html>
